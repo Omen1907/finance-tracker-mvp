@@ -2,6 +2,8 @@ const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
 dotenv.config();
+const jwt = require("jsonwebtoken");
+const JWT_SECRET = process.env.JWT_SECRET;
 
 const app = express();
 app.use(cors());
@@ -134,7 +136,7 @@ app.post("/transactions", authenticateToken, async (req, res) => {
         .json({ error: "Amount must be a positive number" });
     }
 
-    if (!["inome", "expense"].includes(type)) {
+    if (!["income", "expense"].includes(type)) {
       return res
         .status(400)
         .json({ error: "Type must be 'income' or 'expense'" });
@@ -143,7 +145,7 @@ app.post("/transactions", authenticateToken, async (req, res) => {
     if (!date || !/^\d{4}-\d{2}-\d{2}$/.test(date) || isNaN(Date.parse(date))) {
       return res
         .status(400)
-        .json({ error: "Date must be in YYY-MM-DD format" });
+        .json({ error: "Date must be in YYYY-MM-DD format" });
     }
 
     if (!category_id || category_id.trim() === "") {
@@ -153,7 +155,7 @@ app.post("/transactions", authenticateToken, async (req, res) => {
     const finalDescription = description ? description.trim() : null;
 
     const insertQuery =
-      "INSERT INTO transactions (user_id), amount, type, date, category_id, description) Values ($1, $2, $3, $4, $5, $6) RETURNING *";
+      "INSERT INTO transactions (user_id, amount, type, date, category_id, description) Values ($1, $2, $3, $4, $5, $6) RETURNING *";
 
     const result = await pool.query(insertQuery, [
       req.user.userId,
@@ -177,10 +179,6 @@ app.get("/transactions", authenticateToken, async (req, res) => {
 
     const userQuery = "SELECT * FROM transactions WHERE user_id = $1";
     const result = await pool.query(userQuery, [userId]);
-
-    if (result.rows.length === 0) {
-      return res.status(200).json([]);
-    }
 
     res.status(200).json(result.rows);
   } catch (err) {
