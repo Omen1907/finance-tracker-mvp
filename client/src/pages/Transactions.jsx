@@ -52,10 +52,11 @@ const Transactions = () => {
       </button>
       {showForm && (
         <TransactionForm
-          editTransaction={editTransaction}
-          setShowForm={setShowForm}
-          setTransactions={setTransactions}
-        />
+        transactions={transactions}
+        setTransactions={setTransactions}
+        editTransaction={editTransaction}
+        setShowForm={setShowForm}
+      />      
       )}
     </div>
   );
