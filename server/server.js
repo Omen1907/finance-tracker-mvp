@@ -386,14 +386,12 @@ app.put("/savings/:id", authenticateToken, async (req, res) => {
     const savingsId = parseInt(req.params.id, 10);
     const { amount } = req.body;
 
-    if (!isNaN(savingsId) || savingsId <= 0) {
+    if (isNaN(savingsId) || savingsId <= 0) {
       return res.status(400).json({ error: "Invalid savings ID" });
     }
 
     if (typeof amount !== "number" || amount <= 0) {
-      return res
-        .status(400)
-        .json({ error: "Amount must be a positive number" });
+      return res.status(400).json({ error: "Amount must be a positive number" });
     }
 
     const updateQuery = `UPDATE savings SET saved_amount = saved_amount + $1 WHERE id = $2 and user_id = $3 RETURNING *`;
@@ -405,9 +403,7 @@ app.put("/savings/:id", authenticateToken, async (req, res) => {
     ]);
 
     if (result.rowCount === 0) {
-      return res
-        .status(404)
-        .json({ error: "Savings goal not found or not owned by user" });
+      return res.status(404).json({ error: "Savings goal not found or not owned by user" });
     }
 
     res.status(200).json(result.rows[0]);
@@ -416,6 +412,7 @@ app.put("/savings/:id", authenticateToken, async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 });
+
 
 app.delete("/savings/:id", authenticateToken, async (req, res) => {
   try {

@@ -3,9 +3,11 @@ import Navbar from './Navbar';
 
 function Layout() {
   return (
-    <div>
-      <header><Navbar /></header>
-      <main className="p-4">
+    <div className="min-h-screen bg-black text-beige">
+      <header>
+        <Navbar />
+      </header>
+      <main className="p-6 max-w-6xl mx-auto">
         <Outlet />
       </main>
     </div>
