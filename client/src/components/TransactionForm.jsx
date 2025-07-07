@@ -49,15 +49,19 @@ const TransactionForm = ({ transactions, setTransactions, editTransaction, setSh
         )
         setTransactions(updatedTransactions)
       } else {
-        response = await axios.post(`${apiUrl}/transactions`, {
-          amount: parseFloat(formData.amount),
-          category: formData.category,
-          type: formData.type,
-          date: formData.date,
-          description: formData.description
-        }, {
-          headers: { Authorization: `Bearer ${token}` }
-        })
+        response = await axios.post(
+          `${apiUrl}/transactions`,
+          {
+            amount: parseFloat(formData.amount),
+            category: formData.category,
+            type: formData.type,
+            date: formData.date,
+            description: formData.description
+          },
+          {
+            headers: { Authorization: `Bearer ${token}` }
+          }
+        )
 
         setTransactions([...transactions, response.data])
       }
@@ -71,7 +75,6 @@ const TransactionForm = ({ transactions, setTransactions, editTransaction, setSh
       })
 
       setShowForm(false)
-
     } catch (error) {
       if (error.response) {
         console.error('Error saving transaction:', error.response.data.error)
@@ -82,32 +85,38 @@ const TransactionForm = ({ transactions, setTransactions, editTransaction, setSh
   }
 
   return (
-    <div className="bg-gray-900 border border-peachy p-6 rounded-lg space-y-6 text-beige">
-      <h2 className="text-2xl font-bold text-peachy mb-4">{editTransaction ? 'Edit' : 'Add'} Transaction</h2>
+    <div className="bg-gray-900 border border-blue-600 p-6 rounded-lg space-y-6 text-white w-full max-w-2xl md:max-w-3xl lg:max-w-4xl mx-auto shadow-lg animate-fadeIn px-4 sm:px-8">
+      <h2 className="text-2xl font-bold text-blue-500 mb-4 text-center">
+        {editTransaction ? 'Edit' : 'Add'} Transaction
+      </h2>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-5">
         <div>
-          <label className="block mb-1 text-gray-300">Amount</label>
+          <label className="block mb-1 text-blue-300 font-semibold">Amount</label>
           <input
             type="number"
             name="amount"
             value={formData.amount}
             onChange={handleChange}
             required
-            className="w-full p-2 border border-peachy rounded bg-black text-white focus:outline-none focus:ring-2 focus:ring-peachy"
+            className="w-full p-3 border border-blue-600 rounded-lg bg-gray-800 text-white placeholder-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+            placeholder="0.00"
+            step="0.01"
           />
         </div>
 
         <div>
-          <label className="block mb-1 text-gray-300">Category</label>
+          <label className="block mb-1 text-blue-300 font-semibold">Category</label>
           <select
             name="category"
             value={formData.category}
             onChange={handleChange}
             required
-            className="w-full p-2 border border-peachy rounded bg-black text-white focus:outline-none focus:ring-2 focus:ring-peachy"
+            className="w-full p-3 border border-blue-600 rounded-lg bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
           >
-            <option value="">Select Category</option>
+            <option value="" disabled>
+              Select Category
+            </option>
             {categories.map((cat, index) => (
               <option key={index} value={cat}>
                 {cat}
@@ -117,25 +126,27 @@ const TransactionForm = ({ transactions, setTransactions, editTransaction, setSh
         </div>
 
         <fieldset className="space-y-2">
-          <legend className="font-semibold text-gray-300 mb-1">Type</legend>
-          <div className="flex gap-4">
-            <label className="flex items-center gap-1 text-gray-300">
+          <legend className="font-semibold text-blue-300 mb-2">Type</legend>
+          <div className="flex gap-6">
+            <label className="flex items-center gap-2 text-blue-300 cursor-pointer hover:text-blue-500 transition">
               <input
                 type="radio"
                 name="type"
                 value="income"
                 checked={formData.type === 'income'}
                 onChange={handleChange}
+                className="accent-blue-500"
               />
               Income
             </label>
-            <label className="flex items-center gap-1 text-gray-300">
+            <label className="flex items-center gap-2 text-blue-300 cursor-pointer hover:text-blue-500 transition">
               <input
                 type="radio"
                 name="type"
                 value="expense"
                 checked={formData.type === 'expense'}
                 onChange={handleChange}
+                className="accent-blue-500"
               />
               Expense
             </label>
@@ -143,45 +154,56 @@ const TransactionForm = ({ transactions, setTransactions, editTransaction, setSh
         </fieldset>
 
         <div>
-          <label className="block mb-1 text-gray-300">Date</label>
+          <label className="block mb-1 text-blue-300 font-semibold">Date</label>
           <input
             type="date"
             name="date"
             value={formData.date}
             onChange={handleChange}
             required
-            className="w-full p-2 border border-peachy rounded bg-black text-white focus:outline-none focus:ring-2 focus:ring-peachy"
+            className="w-full p-3 border border-blue-600 rounded-lg bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
           />
         </div>
 
         <div>
-          <label className="block mb-1 text-gray-300">Description</label>
+          <label className="block mb-1 text-blue-300 font-semibold">Description</label>
           <input
             type="text"
             name="description"
             value={formData.description}
             onChange={handleChange}
-            className="w-full p-2 border border-peachy rounded bg-black text-white focus:outline-none focus:ring-2 focus:ring-peachy"
+            className="w-full p-3 border border-blue-600 rounded-lg bg-gray-800 text-white placeholder-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+            placeholder="Optional"
           />
         </div>
 
-        <div className="flex justify-between">
+        <div className="flex justify-between items-center">
           <button
             type="submit"
-            className="bg-peachy text-black font-medium py-2 px-4 rounded hover:bg-opacity-90 transition"
+            className="bg-blue-500 hover:bg-blue-600 text-black font-semibold py-2 px-6 rounded-lg transition"
           >
-            {editTransaction ? 'Update Transaction' : 'Add Transaction'}
+            {editTransaction ? 'Update' : 'Add'}
           </button>
 
           <button
             type="button"
             onClick={() => setShowForm(false)}
-            className="text-red-400 hover:underline hover:text-opacity-80 transition"
+            className="text-red-500 hover:underline hover:text-red-400 transition"
           >
             Cancel
           </button>
         </div>
       </form>
+
+      <style>{`
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(15px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fadeIn {
+          animation: fadeIn 0.5s ease forwards;
+        }
+      `}</style>
     </div>
   )
 }

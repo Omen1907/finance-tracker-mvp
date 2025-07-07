@@ -22,7 +22,6 @@ const Transactions = () => {
         })
 
         setTransactions(response.data)
-        console.log('Fetched transactions:', response.data)
       } catch (error) {
         console.error('Error fetching transactions:', error.message)
       }
@@ -38,7 +37,7 @@ const Transactions = () => {
   })
 
   return (
-    <div className="min-h-screen bg-black text-beige p-6">
+    <div className="min-h-screen bg-black text-white p-6">
       <div className="max-w-4xl mx-auto space-y-6">
         <FilterBar filters={filters} setFilters={setFilters} />
 
@@ -51,20 +50,25 @@ const Transactions = () => {
 
         <div className="flex justify-center">
           <button
-            onClick={() => setShowForm(true)}
-            className="bg-peachy text-black px-4 py-2 rounded hover:bg-opacity-90 transition"
+            onClick={() => {
+              setEditTransaction(null)
+              setShowForm(true)
+            }}
+            className="bg-blue-600 text-white px-6 py-3 rounded-md shadow-md hover:bg-blue-700 transition focus:outline-none focus:ring-4 focus:ring-blue-400"
           >
             Add Transaction
           </button>
         </div>
 
         {showForm && (
-          <TransactionForm
-            transactions={transactions}
-            setTransactions={setTransactions}
-            editTransaction={editTransaction}
-            setShowForm={setShowForm}
-          />
+          <div className="mt-8 animate-fadeIn">
+            <TransactionForm
+              transactions={transactions}
+              setTransactions={setTransactions}
+              editTransaction={editTransaction}
+              setShowForm={setShowForm}
+            />
+          </div>
         )}
       </div>
     </div>

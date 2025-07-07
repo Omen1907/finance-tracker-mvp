@@ -8,13 +8,9 @@ const TransactionList = ({ transactions, setTransactions, setEditTransaction, se
   const handleDelete = async (id) => {
     try {
       const token = localStorage.getItem('token')
-      console.log('Delete transaction with ID:', id)
-
       const response = await axios.delete(`${apiUrl}/transactions/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       })
-
-      console.log('Delete response:', response.data)
 
       setTransactions((prev) => prev.filter((transaction) => transaction.id !== id))
     } catch (err) {
@@ -30,7 +26,7 @@ const TransactionList = ({ transactions, setTransactions, setEditTransaction, se
   return (
     <div className="space-y-4">
       {transactions.length === 0 ? (
-        <p className="text-gray-400 text-center">No transactions found.</p>
+        <p className="text-blue-400 text-center italic">No transactions found.</p>
       ) : (
         transactions.map((transaction) => (
           <TransactionItem

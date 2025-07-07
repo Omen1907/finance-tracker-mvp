@@ -40,23 +40,21 @@ const Register = () => {
   }
 
   return (
-    <div className="min-h-screen bg-black flex items-center justify-center px-4">
-      <div className="w-full max-w-md bg-gray-900 border border-peachy rounded-lg shadow p-8 space-y-6">
+    <div className="min-h-screen w-screen bg-gradient-to-r from-black via-gray-900 to-black flex items-center justify-center overflow-hidden px-4">
+      <div className="w-full max-w-md bg-gray-800 border border-blue-500 rounded-2xl shadow-lg p-8 space-y-6">
         <div className="flex items-center justify-center mb-6">
           <img
             className="w-10 h-10 mr-2"
             src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/logo.svg"
             alt="logo"
           />
-          <span className="text-3xl font-bold text-peachy">FinTrack</span>
+          <span className="text-3xl font-bold text-blue-500">FinTrack</span>
         </div>
 
-        <h1 className="text-2xl font-bold text-peachy text-center">
-          Create a New Account
-        </h1>
+        <h1 className="text-2xl font-bold text-white text-center">Create a New Account</h1>
 
         {error && (
-          <div className="bg-red-500 text-white text-center py-2 px-4 rounded">
+          <div className="bg-red-500 text-white text-center py-2 px-4 rounded-lg">
             {error}
           </div>
         )}
@@ -72,7 +70,7 @@ const Register = () => {
               id="email"
               value={formData.email}
               onChange={handleChange}
-              className="w-full p-2 border border-peachy rounded bg-black text-white focus:outline-none focus:ring-2 focus:ring-peachy"
+              className="w-full p-3 border border-gray-600 rounded-lg bg-gray-900 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
               placeholder="name@company.com"
               required
             />
@@ -89,7 +87,7 @@ const Register = () => {
               placeholder="••••••••"
               value={formData.password}
               onChange={handleChange}
-              className="w-full p-2 border border-peachy rounded bg-black text-white focus:outline-none focus:ring-2 focus:ring-peachy"
+              className="w-full p-3 border border-gray-600 rounded-lg bg-gray-900 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
               required
             />
           </div>
@@ -105,21 +103,21 @@ const Register = () => {
               placeholder="••••••••"
               value={formData.confirmPassword}
               onChange={handleChange}
-              className="w-full p-2 border border-peachy rounded bg-black text-white focus:outline-none focus:ring-2 focus:ring-peachy"
+              className="w-full p-3 border border-gray-600 rounded-lg bg-gray-900 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
               required
             />
           </div>
 
           <button
             type="submit"
-            className="w-full bg-peachy text-black font-medium py-2 rounded hover:bg-opacity-90 transition"
+            className="w-full bg-blue-500 text-white font-semibold py-3 rounded-lg hover:bg-blue-600 transition-colors"
           >
             Register
           </button>
 
           <p className="text-sm text-gray-400 text-center">
             Already have an account?{' '}
-            <Link to="/signin" className="text-peachy hover:underline">
+            <Link to="/signin" className="text-blue-500 hover:underline hover:text-blue-400 transition">
               Sign In
             </Link>
           </p>

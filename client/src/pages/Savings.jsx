@@ -21,7 +21,6 @@ const Savings = () => {
         })
 
         setSavings(response.data)
-        console.log('Fetched savings:', response.data)
       } catch (error) {
         console.error('Error fetching savings:', error.message)
       }
@@ -46,16 +45,14 @@ const Savings = () => {
       const token = localStorage.getItem('token')
       if (!token) throw new Error('No token found')
 
-      const response = await axios.put(`${apiUrl}/savings/${goalId}`, { amount: amountToAdd }, {
-        headers: { Authorization: `Bearer ${token}` }
-      })
-
-      const updatedSavings = savings.map(goal =>
-        goal.id === goalId ? response.data : goal
+      const response = await axios.put(
+        `${apiUrl}/savings/${goalId}`,
+        { amount: amountToAdd },
+        { headers: { Authorization: `Bearer ${token}` } }
       )
 
-      setSavings(updatedSavings)
-      setAddAmounts({ ...addAmounts, [goalId]: '' })
+      setSavings(savings.map((goal) => (goal.id === goalId ? response.data : goal)))
+      setAddAmounts((prev) => ({ ...prev, [goalId]: '' }))
       alert('Savings updated successfully!')
     } catch (error) {
       console.error('Error updating savings goal:', error.message)
@@ -63,31 +60,40 @@ const Savings = () => {
   }
 
   return (
-    <div className="min-h-screen bg-black text-beige p-6">
+    <div className="min-h-screen bg-black text-white p-6">
       <div className="max-w-4xl mx-auto space-y-8">
-        <h1 className="text-3xl font-bold text-peachy">Your Savings</h1>
+        <h1 className="text-3xl font-bold text-blue-500">Your Savings</h1>
 
-        <h2 className="text-xl font-semibold text-peachy">Total Saved: ${totalSavings}</h2>
+        <h2 className="text-xl font-semibold text-blue-400">Total Saved: ${totalSavings}</h2>
 
         {savings.length === 0 ? (
-          <p className="text-gray-400">No savings goals found.</p>
+          <p className="text-blue-300 italic text-center">No savings goals found.</p>
         ) : (
           <ul className="space-y-4">
             {savings.map((goal) => (
-              <li key={goal.id} className="p-4 border border-peachy rounded-lg shadow hover:shadow-peachy transition">
-                <h3 className="text-2xl font-semibold text-peachy">{goal.title}</h3>
-                <p className="mb-2 text-gray-300">Saved: ${goal.saved_amount} / ${goal.target_amount}</p>
+              <li
+                key={goal.id}
+                className="p-4 border border-blue-500 rounded-lg shadow hover:shadow-blue-500 transition"
+              >
+                <h3 className="text-2xl font-semibold text-blue-500">{goal.title}</h3>
+                <p className="mb-2 text-gray-300">
+                  Saved: ${goal.saved_amount} / ${goal.target_amount}
+                </p>
                 <div className="flex items-center space-x-2">
                   <input
                     type="number"
                     placeholder="Add amount"
                     value={addAmounts[goal.id] || ''}
-                    onChange={(e) => setAddAmounts({ ...addAmounts, [goal.id]: e.target.value })}
-                    className="p-2 border border-peachy rounded w-32 bg-black text-white focus:outline-none focus:ring-2 focus:ring-peachy"
+                    onChange={(e) =>
+                      setAddAmounts((prev) => ({ ...prev, [goal.id]: e.target.value }))
+                    }
+                    className="p-2 border border-blue-500 rounded w-32 bg-black text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    min="0"
+                    step="0.01"
                   />
                   <button
                     onClick={() => handleAddToSavings(goal.id)}
-                    className="bg-peachy text-black px-3 py-1 rounded hover:bg-opacity-90 transition"
+                    className="bg-blue-500 text-black px-3 py-1 rounded hover:bg-blue-600 transition"
                   >
                     Add
                   </button>
@@ -104,24 +110,27 @@ const Savings = () => {
               const token = localStorage.getItem('token')
               if (!token) throw new Error('No token found')
 
-              const response = await axios.post(`${apiUrl}/savings`, {
-                title,
-                target_amount: parseFloat(targetAmount)
-              }, {
-                headers: { Authorization: `Bearer ${token}` }
-              })
+              const response = await axios.post(
+                `${apiUrl}/savings`,
+                {
+                  title,
+                  target_amount: parseFloat(targetAmount)
+                },
+                {
+                  headers: { Authorization: `Bearer ${token}` }
+                }
+              )
 
-              setSavings([...savings, response.data])
+              setSavings((prev) => [...prev, response.data])
               setTitle('')
               setTargetAmount('')
-              console.log('Savings goal added:', response.data)
             } catch (error) {
               console.error('Error adding savings goal:', error.message)
             }
           }}
-          className="p-6 border border-peachy rounded-lg space-y-4 bg-gray-900"
+          className="p-6 border border-blue-500 rounded-lg space-y-4 bg-gray-900"
         >
-          <h3 className="text-2xl font-semibold text-peachy">Add New Savings Goal</h3>
+          <h3 className="text-2xl font-semibold text-blue-500">Add New Savings Goal</h3>
 
           <div>
             <label className="block mb-1 font-medium text-gray-300">Savings Title</label>
@@ -129,7 +138,7 @@ const Savings = () => {
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="w-full p-2 border border-peachy rounded bg-black text-white focus:outline-none focus:ring-2 focus:ring-peachy"
+              className="w-full p-2 border border-blue-500 rounded bg-black text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
             />
           </div>
@@ -140,14 +149,16 @@ const Savings = () => {
               type="number"
               value={targetAmount}
               onChange={(e) => setTargetAmount(e.target.value)}
-              className="w-full p-2 border border-peachy rounded bg-black text-white focus:outline-none focus:ring-2 focus:ring-peachy"
+              className="w-full p-2 border border-blue-500 rounded bg-black text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
+              min="0"
+              step="0.01"
             />
           </div>
 
           <button
             type="submit"
-            className="bg-peachy text-black px-4 py-2 rounded hover:bg-opacity-90 transition"
+            className="bg-blue-500 text-black px-4 py-2 rounded hover:bg-blue-600 transition"
           >
             Add Savings Goal
           </button>
