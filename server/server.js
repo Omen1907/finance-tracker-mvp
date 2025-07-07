@@ -5,7 +5,7 @@ dotenv.config();
 const jwt = require("jsonwebtoken");
 const JWT_SECRET = process.env.JWT_SECRET;
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3000;
 const pool = require("./db");
 const bcrypt = require("bcrypt");
 
@@ -391,7 +391,9 @@ app.put("/savings/:id", authenticateToken, async (req, res) => {
     }
 
     if (typeof amount !== "number" || amount <= 0) {
-      return res.status(400).json({ error: "Amount must be a positive number" });
+      return res
+        .status(400)
+        .json({ error: "Amount must be a positive number" });
     }
 
     const updateQuery = `UPDATE savings SET saved_amount = saved_amount + $1 WHERE id = $2 and user_id = $3 RETURNING *`;
@@ -403,7 +405,9 @@ app.put("/savings/:id", authenticateToken, async (req, res) => {
     ]);
 
     if (result.rowCount === 0) {
-      return res.status(404).json({ error: "Savings goal not found or not owned by user" });
+      return res
+        .status(404)
+        .json({ error: "Savings goal not found or not owned by user" });
     }
 
     res.status(200).json(result.rows[0]);
@@ -412,7 +416,6 @@ app.put("/savings/:id", authenticateToken, async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 });
-
 
 app.delete("/savings/:id", authenticateToken, async (req, res) => {
   try {
