@@ -2,8 +2,8 @@
     "name": "monorepo-root",
     "private": true,
     "scripts": {
-      "start": "cd src && npm start",
-      "install": "cd src && npm install"
+      "start": "cd server && npm start",
+      "install": "cd server && npm install"
     }
   }
   
