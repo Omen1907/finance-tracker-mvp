@@ -20,7 +20,6 @@ const pool = new Pool({
 
   connectionString: process.env.SUPABASE_DB_URL,
   ssl: { rejectUnauthorized: false },
-  host: "db.kdizbkujqimcvjodjkso.supabase.co",
   family: 4,
 });
 
