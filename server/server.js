@@ -12,7 +12,10 @@ const bcrypt = require("bcrypt");
 const app = express();
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: [
+      "http://localhost:5173",
+      "https://finance-tracker-mvp.vercel.app/",
+    ],
     credentials: true,
   })
 );
